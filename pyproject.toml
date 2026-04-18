@@ -1,6 +1,6 @@
 [project]
 name = "sqlite-mcp-server"
-version = "0.1.3"
+version = "0.1.4"
 description = "Universal SQLite DB MCP Server"
 readme = "README.md"
 authors = [
@@ -24,7 +24,7 @@ Repository = "https://github.com/stevefordev/sqlite-mcp"
 Issues = "https://github.com/stevefordev/sqlite-mcp/issues"
 
 [project.scripts]
-sqlite-mcp = "sqlite_mcp.main:main"
+sqlite-mcp-server = "sqlite_mcp.main:main"
 
 [tool.uv]
 package = true
