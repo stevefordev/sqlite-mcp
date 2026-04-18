@@ -1,22 +1,27 @@
 [project]
-name = "sqlite-mcp"
+name = "sqlite-mcp-server"
 version = "0.1.0"
 description = "Universal SQLite DB MCP Server"
 readme = "README.md"
 authors = [
-    { name = "Gemini CLI" }
+    { name = "stevefordev" }
 ]
 keywords = ["mcp", "sqlite", "database", "ai"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Topic :: Database",
+    "Topic :: Local Database MCP",
 ]
 requires-python = ">=3.10"
 dependencies = [
     "mcp>=1.27.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/stevefordev/sqlite-mcp"
+Repository = "https://github.com/stevefordev/sqlite-mcp"
+Issues = "https://github.com/stevefordev/sqlite-mcp/issues"
 
 [project.scripts]
 sqlite-mcp = "sqlite_mcp.main:main"
