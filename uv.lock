@@ -673,8 +673,8 @@ wheels = [
 ]
 
 [[package]]
-name = "sqlite-mcp"
-version = "0.1.0"
+name = "sqlite-mcp-server"
+version = "0.1.4"
 source = { editable = "." }
 dependencies = [
     { name = "mcp" },
