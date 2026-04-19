@@ -167,6 +167,64 @@ def add_record(db_path: str, table_name: str, title: str, content: str) -> str:
         return f"Error saving record to {table_name}: {str(e)}"
 
 @mcp.tool()
+def search_databases(path: str, query: str) -> List[Dict[str, Any]]:
+    """
+    Search for a keyword in all SQLite databases within a directory.
+    Searches table names and column names to help discover relevant data.
+    """
+    db_extensions = {".db", ".sqlite", ".sqlite3"}
+    p = Path(path)
+    if not p.exists():
+        return [{"error": f"Path {path} does not exist."}]
+    
+    results = []
+    query_lower = query.lower()
+    
+    # Get all potential database files
+    try:
+        db_files = [f for f in p.glob("*") if f.suffix.lower() in db_extensions]
+    except Exception as e:
+        return [{"error": f"Error scanning directory: {str(e)}"}]
+    
+    for db_file in db_files:
+        db_path = str(db_file)
+        try:
+            with get_db_connection(db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Search table names
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+                tables = [row["name"] for row in cursor.fetchall()]
+                
+                for table in tables:
+                    # Match table name
+                    if query_lower in table.lower():
+                        results.append({
+                            "database": db_file.name,
+                            "table": table,
+                            "match_type": "table_name",
+                            "context": f"Table '{table}' matches query"
+                        })
+                    
+                    # Search column names
+                    cursor.execute(f"PRAGMA table_info('{table}');")
+                    for col_row in cursor.fetchall():
+                        col_name = col_row["name"]
+                        if query_lower in col_name.lower():
+                            results.append({
+                                "database": db_file.name,
+                                "table": table,
+                                "column": col_name,
+                                "match_type": "column_name",
+                                "context": f"Column '{col_name}' in table '{table}' matches query"
+                            })
+        except Exception:
+            # Skip files that aren't valid databases or are locked
+            continue
+            
+    return results if results else [{"message": f"No matches found for '{query}' in {path}"}]
+
+@mcp.tool()
 def execute_query(db_path: str, query: str) -> List[Dict[str, Any]]:
     """
     Execute a SELECT query on the specified SQLite database.

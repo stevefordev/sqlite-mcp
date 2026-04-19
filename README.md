@@ -23,18 +23,26 @@
 
 ### 2. 사용 방법
 
-#### uvx 사용 (추천)
-별도의 설치 없이 `uvx`를 통해 즉시 실행할 수 있습니다:
-```bash
-uvx sqlite-mcp-server
-```
+#### 📦 설치 및 실행 (추천)
+Windows의 보안 정책(Smart App Control 등)으로 인해 `uvx` 사용 시 실행이 차단될 수 있습니다. 이를 방지하기 위해 패키지를 로컬 도구로 설치하여 사용하는 것을 권장합니다.
 
-#### PyPI를 통한 설치
-패키지를 전역 도구로 설치하여 사용할 수도 있습니다:
 ```bash
+# uv 사용 (권장)
 uv tool install sqlite-mcp-server
+
 # 또는 pip 사용
 pip install sqlite-mcp-server
+```
+
+설치 후에는 어디서든 명령어로 실행할 수 있습니다:
+```bash
+sqlite-mcp-server
+```
+
+#### ⚡ uvx 사용 (선택 사항)
+설치 없이 빠르게 실행해보고 싶을 때 사용합니다 (Windows에서 `os error 4551` 발생 시 위 설치 방법을 사용하세요):
+```bash
+uvx sqlite-mcp-server
 ```
 
 ### 3. MCP 클라이언트 연동
@@ -68,8 +76,7 @@ Claude Desktop 설정 파일에 다음 내용을 추가하세요:
         "tool",
         "run",
         "--from",
-        "sqlite-mcp-server",
-        "sqlite-mcp"
+        "sqlite-mcp-server"
       ]
     }
   }
@@ -86,6 +93,7 @@ claude mcp add sqlite-mcp -- uvx sqlite-mcp-server
 
 - `create_database(db_path)`: 새로운 SQLite 데이터베이스 파일을 생성합니다.
 - `list_databases(path)`: 지정된 경로의 SQLite DB 목록을 반환합니다.
+- `search_databases(path, query)`: 지정된 경로 내의 모든 DB를 검색하여 특정 키워드(테이블명, 컬럼명)가 포함된 위치를 찾습니다.
 - `get_schema_summary(db_path)`: DB의 모든 테이블과 컬럼 구조를 요약해서 보여줍니다.
 - `list_tables(db_path)`: DB 내의 모든 테이블 목록을 가져옵니다.
 - `describe_table(db_path, table_name)`: 특정 테이블의 스키마와 샘플 데이터를 보여줍니다.
